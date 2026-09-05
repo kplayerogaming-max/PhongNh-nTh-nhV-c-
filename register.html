@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Đăng ký — Phong Nhân Thánh Vực</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="auth-page">
+
+  <main class="auth-card">
+
+    <div class="brand center">
+      <span class="brand-mark">🏯</span>
+
+      <span>
+        Phong Nhân Thánh Vực
+      </span>
+    </div>
+
+    <h1>Đăng ký</h1>
+
+    <p class="muted">
+      Khởi tạo tài khoản thành viên
+    </p>
+
+    <form id="registerForm">
+
+      <label>
+        Tên hiển thị
+
+        <input
+          id="displayName"
+          type="text"
+          required
+          maxlength="80"
+          autocomplete="name"
+        >
+      </label>
+
+      <label>
+        Email
+
+        <input
+          id="email"
+          type="email"
+          required
+          autocomplete="email"
+        >
+      </label>
+
+      <label>
+        Mật khẩu
+
+        <input
+          id="password"
+          type="password"
+          required
+          minlength="6"
+          autocomplete="new-password"
+        >
+      </label>
+
+      <label>
+        Xác nhận mật khẩu
+
+        <input
+          id="confirmPassword"
+          type="password"
+          required
+          minlength="6"
+          autocomplete="new-password"
+        >
+      </label>
+
+      <button
+        class="btn full"
+        type="submit"
+      >
+        Tạo tài khoản
+      </button>
+
+      <p
+        id="formMessage"
+        class="message"
+      ></p>
+
+    </form>
+
+    <p class="auth-switch">
+      Đã có tài khoản?
+      <a href="login.html">Đăng nhập</a>
+    </p>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="js/config.js"></script>
+
+  <script src="js/auth.js"></script>
+
+  <script>
+    document
+      .getElementById("registerForm")
+      .addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+        const msg =
+          document.getElementById("formMessage");
+
+        const displayName =
+          document
+            .getElementById("displayName")
+            .value
+            .trim();
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+        const confirmPassword =
+          document
+            .getElementById("confirmPassword")
+            .value;
+
+        if (password !== confirmPassword) {
+
+          msg.textContent =
+            "Mật khẩu xác nhận không khớp.";
+
+          msg.className =
+            "message error";
+
+          return;
+        }
+
+        msg.textContent =
+          "Đang tạo tài khoản...";
+
+        msg.className =
+          "message";
+
+        try {
+
+          await signUp(
+            email,
+            password,
+            displayName
+          );
+
+          msg.textContent =
+            "Đăng ký thành công. Hãy kiểm tra email để xác nhận tài khoản.";
+
+          msg.className =
+            "message success";
+
+          e.target.reset();
+
+        } catch (err) {
+
+          msg.textContent =
+            err.message ||
+            "Đăng ký thất bại.";
+
+          msg.className =
+            "message error";
+        }
+
+      });
+  </script>
+
+</body>
+
+</html>
